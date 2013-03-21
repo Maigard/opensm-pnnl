@@ -312,6 +312,7 @@ typedef struct osm_subn_opt {
 	char *io_guid_file;
 	boolean_t port_shifting;
 	uint32_t scatter_ports;
+	boolean_t reverse_sort_routing_order;
 	uint16_t max_reverse_hops;
 	char *ids_guid_file;
 	char *guid_routing_order_file;

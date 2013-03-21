@@ -827,6 +827,10 @@ static int compar_sw_load(const void *s1, const void *s2)
 	return get_sw_endport_links(s2) - get_sw_endport_links(s1);
 }
 
+static int compar_sw_load_r(const void *s1, const void *s2) {
+	return compar_sw_load(s2, s1);
+}
+
 static void sort_ports_by_switch_load(osm_ucast_mgr_t * m)
 {
 	int i, num = cl_qmap_count(&m->p_subn->sw_guid_tbl);
@@ -843,7 +847,10 @@ static void sort_ports_by_switch_load(osm_ucast_mgr_t * m)
 	for (i = 0; i < num; i++)
 		sw_count_endport_links(s[i]);
 
-	qsort(s, num, sizeof(*s), compar_sw_load);
+	if (m->p_subn->opt.reverse_sort_routing_order == TRUE) {
+		qsort(s, num, sizeof(*s), compar_sw_load_r);
+	} else
+		qsort(s, num, sizeof(*s), compar_sw_load);
 
 	for (i = 0; i < num; i++)
 		add_sw_endports_to_order_list(s[i], m);
